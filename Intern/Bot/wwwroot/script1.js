@@ -1125,7 +1125,7 @@ window.addEventListener('load', async () => {
             console.log("🧩 arr nhan vao:", arr);
             console.log("⚙️ fullHopdong ban dau:", fullHopdong, "| isAdmin:", isAdmin);
 
-            let tinhieu = arr[1] == "Tin hieu long: Manh" ? "LONG" : "SHORT";
+            let tinhieu = arr[1].toUpperCase() == "TIN HIEU: LONG" ? "LONG" : "SHORT";
             console.log("------------Tin Hieu------------ " + tinhieu);
             add_logs("Tín hiệu: " + tinhieu);
 
