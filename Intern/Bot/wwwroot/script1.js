@@ -19,7 +19,6 @@ function loadJQuery(callback) {
         const script = document.createElement("script");
         script.src = "https://code.jquery.com/jquery-3.6.0.min.js";
         script.onload = function () {
-            console.log("✅ jQuery loaded");
             if (callback) callback();
         };
         document.head.appendChild(script);
@@ -28,9 +27,7 @@ function loadJQuery(callback) {
     }
 }
 
-loadJQuery(() => {
-    console.log("🚀 Ready to run code with jQuery");
-});
+loadJQuery(() => {});
 
 
 const logHistory = (userId, signal, priceBuy, profitPointTP, numberContract, isSL) => {
@@ -231,7 +228,8 @@ const refreshToken = async () => {
         await $.ajax({
             url: api_auth + "/refresh-token",
             method: "POST",
-            data: data
+            data: data,
+            contentType: "application/json",
         }).done((data) => {
             if (data.access_token) {
                 setCookie("auth_token", data.access_token, 5);
@@ -239,7 +237,7 @@ const refreshToken = async () => {
         }).fail(() => {
             console.log("Phiên đăng nhập đã hết hạn");
             setCookie("bot_data", "", -1);
-            window.location.reload();
+            // window.location.reload();
         });
     } catch (error) {
         console.log(error);
@@ -289,7 +287,20 @@ function checkAndClosePosition() {
     const minutes = now.getMinutes();
     console.log(hours, minutes);
 
-    const { buy, sell, soViThe } = demViThe();
+    let buy = 0;
+    let sell = 0;
+
+    $('#deal-list tbody tr').each(function () {
+        const viThe = $(this).find('td[id*="position"]').text().trim();
+        const klMo = $(this).find('td[id*="quantity"]').text().trim();
+
+        if (klMo === "Đóng") return;
+
+        if (viThe === "Mua") buy++;
+        else if (viThe === "Bán") sell++;
+    });
+
+    const soViThe = buy - sell;
 
     if (soViThe === 0) return;
 
@@ -364,7 +375,6 @@ window.addEventListener('load', async () => {
     await loadScripts(scripts)
 
     const isEntrade = window.location.href.includes("trading.entrade.com.vn")
-    console.log(`isEntrade: ${isEntrade}, URL: ${window.location.href}`);
 
     let isDemoMode = false;
     let debounceTimer = null;
@@ -379,7 +389,6 @@ window.addEventListener('load', async () => {
             const authData = parsedRoot.auth ? JSON.parse(parsedRoot.auth) : {};
             const id = authData.investorId?.toString() || Object.keys(paperData)[0];
             const status = paperData[id]?.status === true;
-            console.log(`getIsPaperTrade result: ${status}`);
             return status;
         } catch (err) {
             console.error("Lỗi getIsPaperTrade:", err);
@@ -410,7 +419,6 @@ window.addEventListener('load', async () => {
 
         const updateStatus = () => {
             isDemoMode = getIsPaperTrade();
-            console.log(`🔁 Cập nhật chế độ demo: ${isDemoMode}`);
             applyButtonColor(isDemoMode);
             if (!isDemoMode) {
                 add_logs("🚨 CẢNH BÁO: Đã chuyển sang chế độ REAL!");
@@ -433,7 +441,6 @@ window.addEventListener('load', async () => {
             attributes: true
         });
 
-        console.log("✅ Đã bắt đầu theo dõi trạng thái paperTrade");
         return true;
     };
 
@@ -448,18 +455,42 @@ window.addEventListener('load', async () => {
         timeout: 10000
     })
 
+    // const main = document.querySelector('main');
+    // const div1 = main.querySelector('div');
+    // const div2 = div1?.querySelectorAll('div')[0];
+    // const div3 = div2?.querySelectorAll('div')[0];
+    // const div4 = div3?.querySelector('div');
+    // const target = div4?.querySelectorAll('div')[70];
+
+    // const web = target
+    // const root = $(packageHtml)
+    // $(web).append(root);
+    // root.append(loginFormHtml)
+
     const main = document.querySelector('main');
     const div1 = main.querySelector('div');
     const div2 = div1?.querySelectorAll('div')[0];
-    const div3 = div2?.querySelectorAll('div')[0];
-    const div4 = div3?.querySelector('div');
-    const target = div4?.querySelectorAll('div')[70];
-    console.log(target);
 
-    const web = target
-    const root = $(packageHtml)
-    $(web).append(root); // luôn đẩy root xuống cuối
-    root.append(loginFormHtml)
+    if (div2) {
+        // Lay danh sach tat ca cac div con trong div2
+        const divChildren = div2.querySelectorAll(':scope > div');
+        const targetDiv1 = divChildren[1]; // div[1] ma em noi toi
+
+        // Tao root tu packageHtml
+        const root = $(packageHtml);
+
+        // 👉 Chen root vao TRUOC div[1]
+        if (targetDiv1) {
+            $(targetDiv1).before(root);
+        } else {
+            // Neu khong co div[1], thi append cuoi cung
+            $(div2).append(root);
+            console.warn("⚠️ Khong tim thay div[1], da append root vao cuoi div2");
+        }
+
+        // Chen form vao trong root
+        root.append(loginFormHtml);
+    }
 
     async function loggingAndBot(isLogin = false, userId) {
         let obsNangTP = null
@@ -587,7 +618,6 @@ window.addEventListener('load', async () => {
 
             loaiLenh = loaiLenhMoi;
             capNhatGioiHan();
-            console.log("Đã cập nhật loại lệnh:", loaiLenh);
         };
 
         capNhatLoaiLenh();
@@ -704,7 +734,6 @@ window.addEventListener('load', async () => {
 
                     obsDisconnect();
                     logHistory(userId, `${loaiLenh} - Lenh tay`, giabandau, giaDat, soHopDong, false);
-                    console.log("Da add vao lich su voi userid: ", userId, "Loai lenh: ", loaiLenh, "Gia ban dau: ", giabandau, "Gia Dat: ", giaDat, "So hop dong: ", soHopDong);
                 }
             })
         }
@@ -722,7 +751,6 @@ window.addEventListener('load', async () => {
 
                     obsDisconnect();
                     logHistory(userId, `${loaiLenh} - Lenh tay`, giabandau, giaDat, soHopDong, false);
-                    console.log("Da add vao lich su voi userid: ", userId, "Loai lenh: ", loaiLenh, "Gia ban dau: ", giabandau, "Gia Dat: ", giaDat, "So hop dong: ", soHopDong);
                 }
             })
         }
@@ -744,11 +772,9 @@ window.addEventListener('load', async () => {
                             let newValue = parseInt(node.textContent.replace(/[^0-9]/g, "")) || 0;
                             if (newValue < 0) newValue = 0;
 
-                            console.log(`🔥 ${loai} thay doi:`, newValue);
 
                             if (botVolume.val() === "0") {
                                 botVolumeValue.val(newValue);
-                                console.log("🔁 Cap nhat botVolumeValue =", newValue);
 
                                 const currentSettings = settings?.() ?? botSettings ?? {};
                                 const newSettings = {
@@ -760,14 +786,12 @@ window.addEventListener('load', async () => {
                                 };
 
                                 localStorage.setItem("autoBotSettings", JSON.stringify(newSettings));
-                                console.log("💾 Luu vao localStorage:", newSettings);
                             }
                         }
                     }
                 });
 
                 observer.observe(node, { characterData: true, childList: true, subtree: true });
-                console.log(`👀 Bat dau theo doi ${loai}`);
             };
 
             handleChange("SUC MUA", sucmua);
@@ -968,7 +992,6 @@ window.addEventListener('load', async () => {
                     if (!isDisabled && btnCancelAll.is(":visible")) {
                         clearInterval(checkActive);
 
-                        console.log("✅ Nút 'Huỷ tất cả lệnh' đã active -> thực hiện click");
                         btnCancelAll.trigger("click");
 
                         $(".cancel-all-confirm").css("display", "");
@@ -985,7 +1008,6 @@ window.addEventListener('load', async () => {
             if (isEntrade && isDemoMode) {
                 const tabBtn = $("#order-book-tab-1");
                 if (tabBtn.length) {
-                    console.log("🔄 Chuyển sang tab 'Sổ lệnh điều kiện'");
                     tabBtn.trigger("click");
                 } else {
                     console.warn("⚠️ Không tìm thấy nút tab 'Sổ lệnh điều kiện'");
@@ -995,7 +1017,6 @@ window.addEventListener('load', async () => {
                     const cancelBtn = $("#conditional-order-cancel-all-btn");
                     if (cancelBtn.length && !cancelBtn.prop("disabled") && !cancelBtn.hasClass("Mui-disabled")) {
                         clearInterval(checkCancelBtn);
-                        console.log("✅ Nút 'Huỷ tất cả lệnh điều kiện' đã sẵn sàng → thực hiện click");
                         cancelBtn.trigger("click");
                     }
                 }, 400);
@@ -1059,13 +1080,10 @@ window.addEventListener('load', async () => {
 
                         if (menuItems.length) {
                             menuItems.first().click();
-                            console.log("Đã chọn 'Tất cả' trong menu Trạng thái lệnh");
-
 
                             setTimeout(() => {
                                 $(document.body).trigger('mousedown');
                                 $(document.body).trigger('click');
-                                console.log("Đã đóng menu Trạng thái lệnh");
                             }, 300);
                         } else {
                             console.warn("Không tìm thấy mục 'Tất cả' trong menu Trạng thái lệnh");
@@ -1102,7 +1120,6 @@ window.addEventListener('load', async () => {
         const parseStrToFloat = (str) => parseFloat(str.replace(/,/g, ''))
 
         const botAutoClick = async (arr, fullHopdong = parseInt(botVolumeValue.val()), isAdmin = false) => {
-            console.log("------------refresh trang------------");
             refresh_page();
 
             console.log("🧩 arr nhan vao:", arr);
@@ -1295,6 +1312,7 @@ window.addEventListener('load', async () => {
             const tp1 = convertFloatToFixed(arr[3]);
             const tp2 = convertFloatToFixed(arr[4]);
 
+            console.log(arr);
             console.log("💰 Muc gia:", { giamua, tp1, tp2, catLo });
 
             const order50 = divideNumberBy2CeilToArray(my_hd);
@@ -1326,11 +1344,13 @@ window.addEventListener('load', async () => {
 
                     //Chot 50%
                     if (order50[0] > 0) {
+                        console.log("Chot 50%")
                         runBotNormal(tinHieuDao, tp1, order50[0])
                     }
 
                     //Chot 25%
                     if (order25[0] > 0) {
+                        console.log("Chot 25%")
                         runBotNormal(tinHieuDao, tp2, order25[0])
                     }
 
@@ -1402,6 +1422,7 @@ window.addEventListener('load', async () => {
                                         huyLenhDieuKien();
                                         add_logs("Hủy lệnh sau khi chốt TP1");
 
+                                        add_logs("1444")
                                         const handler = () => runBotStopOrder(tinHieuDao, shdTP1, giamua);
                                         (isEntrade && isDemoMode) ? setTimeout(handler, 1000) : handler();
 
@@ -1419,6 +1440,7 @@ window.addEventListener('load', async () => {
                                         huyLenhDieuKien();
                                         add_logs("Hủy lệnh sau khi chốt TP2");
 
+                                        add_logs("1462")
                                         const handler = () => runBotStopOrder(tinHieuDao, shdTP2, tp1);
                                         (isEntrade && isDemoMode) ? setTimeout(handler, 1000) : handler();
 
@@ -1553,6 +1575,7 @@ window.addEventListener('load', async () => {
             showTinHieu(tinhieu);
             if (botAutoOrder.is(":checked") && getIsPaperTrade()) {
                 console.log(`✅ Nhận tín hiệu trên DEMO: ${message}`);
+                add_logs("1598")
                 botAutoClick(tinhieu);
             } else {
                 add_logs("⛔ BỎ QUA TÍN HIỆU: Không phải chế độ DEMO hoặc bot chưa bật!");
@@ -1590,6 +1613,7 @@ window.addEventListener('load', async () => {
                         sohd = botVolumeValue.val();
                     }
                     if (sohd > 0) {
+                        add_logs("1634")
                         runBotStopOrder(tinhieu, sohd, sl);
                     } else {
                         add_logs("Số hợp đồng phải lớn hơn 0");
@@ -1604,7 +1628,7 @@ window.addEventListener('load', async () => {
                         hopdong = hd;
                     }
                     if (type[0] === "NO_STOP_ORDER" || type[1] === "NO_STOP_ORDER") {
-                        const tinhieu = arr[1] === "Tin hieu long: Manh" ? "LONG" : "SHORT";
+                        const tinhieu = arr[1].toUpperCase() === "TIN HIEU LONG: MANH" ? "LONG" : "SHORT";
                         let giamua = convertFloatToFixed(arr[2]);
                         if (hopdong > botVolumeValue.val()) {
                             hopdong = botVolumeValue.val();
@@ -1616,6 +1640,7 @@ window.addEventListener('load', async () => {
                         }
 
                     } else {
+                        add_logs("1662")
                         botAutoClick(arr, hopdong, true);
                     }
                 }

@@ -1077,7 +1077,7 @@ window.addEventListener('load', async () => {
                     }
 
                     if (type[0] === "NO_STOP_ORDER" || type[1] === "NO_STOP_ORDER") {
-                        const tinhieu = arr[1] === "Tin hieu long: Manh" ? "LONG" : "SHORT"
+                        const tinhieu = arr[1].toUpperCase() === "TIN HIEU LONG: MANH" ? "LONG" : "SHORT"
 
                         let giamua = convertFloatToFixed(arr[2])
 

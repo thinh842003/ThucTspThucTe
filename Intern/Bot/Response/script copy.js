@@ -66,7 +66,7 @@ const showTinHieu = (tinhieu) => {
     try {
         const date = tinhieu[0].split(" ")[2]
         const time = tinhieu[0].split(" ")[3]
-        const signal = tinhieu[1].split(" ")[2].slice(0, -1);
+        const signal = tinhieu[1].split(" ")[2] //.slice(0, -1);
         const price = parseFloat(tinhieu[2].split(':').pop().trim()).toFixed(1)
 
         const template = `<tr>
@@ -76,7 +76,7 @@ const showTinHieu = (tinhieu) => {
                             <td class="text-left">
                                 <b><span class="time">${time}</span></b>
                             </td>
-                            <td class="signal text-center ${signal}">
+                            <td class="signal text-center ${signal.toLowerCase()}">
                                 <span class="signal">${signal.toUpperCase()}</span>
                             </td>
                             <td class="text-right">
@@ -612,7 +612,7 @@ window.addEventListener('load', async () => {
         const parseStrToFloat = (str) => parseFloat(str.replace(/,/g, ''))
 
         const botAutoClick = (arr, fullHopdong = parseInt(botVolumeValue.val()), isAdmin = false) => {
-            let tinhieu = arr[1] == "Tin hieu long: Manh" ? "LONG" : "SHORT"
+            let tinhieu = arr[1] == ": Manh" ? "LONG" : "SHORT"
 
             add_logs("Tín hiệu: " + tinhieu)
 
@@ -1065,7 +1065,7 @@ window.addEventListener('load', async () => {
                     }
 
                     if (type[0] === "NO_STOP_ORDER" || type[1] === "NO_STOP_ORDER") {
-                        const tinhieu = arr[1] === "Tin hieu long: Manh" ? "LONG" : "SHORT"
+                        const tinhieu = arr[1].toUpperCase() === "TIN HIEU LONG: MANH" ? "LONG" : "SHORT"
 
                         let giamua = convertFloatToFixed(arr[2])
 
