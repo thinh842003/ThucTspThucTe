@@ -101,7 +101,7 @@ const showTinHieu = (tinhieu) => {
     try {
         const date = tinhieu[0].split(" ")[0]
         const time = tinhieu[0].split(" ")[1]
-        const signal = tinhieu[1].split(" ")[2].slice(0, -1);
+        const signal = tinhieu[1].split(" ")[2] //.slice(0, -1);
         const price = parseFloat(tinhieu[2].split(':').pop().trim()).toFixed(1)
 
         const tbody = $("#bot-tbl-signals tbody")
