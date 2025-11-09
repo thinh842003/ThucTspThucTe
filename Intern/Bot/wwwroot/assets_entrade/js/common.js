@@ -35,7 +35,7 @@ function getCookie(cname) {
 }
 
 const packageHtml = `
-    <div id='sat-content'>
+    <div id='sat-content' style="width:50%;max-width:none;margin:0 auto;">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.22.6/dist/bootstrap-table.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -656,7 +656,7 @@ function getTrendType() {
 
 `
 
-const liPanel = `<button class="MuiButtonBase-root MuiTab-root MuiTab-textColorPrimary sc-jzapQk hycrYJ Mui-autobot" 
+const liPanel = `<button class="Mui-autobot" 
     tabindex="-1" 
     type="button" 
     role="tab" 

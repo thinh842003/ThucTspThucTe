@@ -27,7 +27,7 @@ function loadJQuery(callback) {
     }
 }
 
-loadJQuery(() => {});
+loadJQuery(() => { });
 
 
 const logHistory = (userId, signal, priceBuy, profitPointTP, numberContract, isSL) => {
@@ -114,7 +114,7 @@ const showTinHieu = (tinhieu) => {
                             <td class="text-left">
                                 <b><span class="time">${time}</span></b>
                             </td>
-                            <td class="signal text-center ${signal}">
+                            <td class="signal text-center ${signal.toLowerCase()}">
                                 <span class="signal">${signal.toUpperCase()}</span>
                             </td>
                             <td class="text-right">
@@ -455,40 +455,20 @@ window.addEventListener('load', async () => {
         timeout: 10000
     })
 
-    // const main = document.querySelector('main');
-    // const div1 = main.querySelector('div');
-    // const div2 = div1?.querySelectorAll('div')[0];
-    // const div3 = div2?.querySelectorAll('div')[0];
-    // const div4 = div3?.querySelector('div');
-    // const target = div4?.querySelectorAll('div')[70];
-
-    // const web = target
-    // const root = $(packageHtml)
-    // $(web).append(root);
-    // root.append(loginFormHtml)
-
     const main = document.querySelector('main');
     const div1 = main.querySelector('div');
     const div2 = div1?.querySelectorAll('div')[0];
 
     if (div2) {
-        // Lay danh sach tat ca cac div con trong div2
         const divChildren = div2.querySelectorAll(':scope > div');
-        const targetDiv1 = divChildren[1]; // div[1] ma em noi toi
+        const targetDiv1 = divChildren[1];
 
-        // Tao root tu packageHtml
         const root = $(packageHtml);
 
-        // 👉 Chen root vao TRUOC div[1]
         if (targetDiv1) {
-            $(targetDiv1).before(root);
-        } else {
-            // Neu khong co div[1], thi append cuoi cung
-            $(div2).append(root);
-            console.warn("⚠️ Khong tim thay div[1], da append root vao cuoi div2");
+            $(targetDiv1).after(root);
         }
 
-        // Chen form vao trong root
         root.append(loginFormHtml);
     }
 
@@ -516,15 +496,24 @@ window.addEventListener('load', async () => {
         const extContent = $("#ext-content")
         extContent.children().replaceWith(loggingHtml)
 
-        const MuiTabs_flexContainer = $("div.MuiTabs-flexContainer")
-        MuiTabs_flexContainer.append(liPanel)
+        // const MuiTabs_flexContainer = $("div.MuiTabs-flexContainer")
+        // MuiTabs_flexContainer.append(liPanel)
+        const MuiTabs_flexContainer = $("div.MuiTabs-flexContainer");
+        const firstButton = MuiTabs_flexContainer.find("button").first();
+
+        if (firstButton.length) {
+            const buttonClass = firstButton.attr("class"); // lay class cua button[0]
+            $(liPanel).addClass(buttonClass); // them class vao liPanel
+        }
+
+        MuiTabs_flexContainer.append(liPanel);
+
 
         const tabExtPanel = $('<div role="tabpanel" id="order-book-tabpanel-2" aria-labelledby="order-book-tab-2" display="display: none" hidden></div>');
 
         tabExtPanel.append(tabExtContent);
 
         $("div[role=tabpanel]").parent().append(tabExtPanel);
-
 
         $("div.MuiTabs-flexContainer button").on("click", function () {
             const $this = $(this);
@@ -720,8 +709,11 @@ window.addEventListener('load', async () => {
 
         let giabandau = 0
 
+        const buttonBuy = document.getElementById("order-buy-btn");
+        const buttonSell = document.getElementById("order-sell-btn");
+
         if (isEntrade && isDemoMode) {
-            $("div.sc-cuHhuN.kSgcSi").click(function () {
+            $(buttonBuy).add(buttonSell).on("click", function () {
                 if (theoDoiTrangThaiDatlenhInterval || obsNangTP) {
                     const row1 = document.querySelector("div[aria-rowindex='1']");
                     if (!row1) {
@@ -735,10 +727,10 @@ window.addEventListener('load', async () => {
                     obsDisconnect();
                     logHistory(userId, `${loaiLenh} - Lenh tay`, giabandau, giaDat, soHopDong, false);
                 }
-            })
+            });
         }
         else {
-            $("div.sc-cuHhuN.kSgcSi").click(() => {
+            $(buttonBuy).add(buttonSell).on("click", function () {
                 if (theoDoiTrangThaiDatlenhInterval || obsNangTP) {
                     const row1 = document.querySelector("div[aria-rowindex='1']");
                     if (!row1) {
@@ -752,7 +744,7 @@ window.addEventListener('load', async () => {
                     obsDisconnect();
                     logHistory(userId, `${loaiLenh} - Lenh tay`, giabandau, giaDat, soHopDong, false);
                 }
-            })
+            });
         }
 
         const funcTheoDoiSucMuaBan = () => {
@@ -839,18 +831,12 @@ window.addEventListener('load', async () => {
                     if (btnBuy) {
                         btnBuy.click();
                     }
-                    else {
-                        add_logs("Không tìm thấy nút MUA");
-                    }
                 }
 
                 if (tinhieu === "SHORT") {
                     const btnSell = document.getElementById("order-sell-btn");
                     if (btnSell) {
                         btnSell.click();
-                    }
-                    else {
-                        add_logs("Không tìm thấy nút BÁN");
                     }
                 }
             }
@@ -884,48 +870,40 @@ window.addEventListener('load', async () => {
                     const btnDieuKien = document.getElementById("condition-order-button");
                     if (btnDieuKien) {
                         btnDieuKien.click();
-                        add_logs("Đã click mở tab LỆNH ĐIỀU KIỆN");
                     }
                     else {
-                        add_logs("Không tìm thấy nút LỆNH ĐIỀU KIỆN (#condition-order-button)");
                         return;
                     }
 
                     const triggerPriceInp = await waitForElement("#trigger-price-inp", 7000);
                     if (!triggerPriceInp) {
-                        add_logs("Không tìm thấy ô Giá kích hoạt (#trigger-price-inp)");
                         return;
                     }
 
                     setReactInputValue(triggerPriceInp, stopOrderValue);
-                    add_logs(`Đã điền giá kích hoạt: ${stopOrderValue}`);
 
 
                     if (tinhieu === "LONG") {
                         const btnGreater = document.getElementById("condition-great-than-btn");
                         if (btnGreater) {
                             btnGreater.click();
-                            add_logs("Chọn dấu ≥ (LONG)");
                         }
                     }
                     else {
                         const btnLess = document.getElementById("condition-less-than-btn");
                         if (btnLess) {
                             btnLess.click();
-                            add_logs("Chọn dấu ≤ (SHORT)");
                         }
                     }
 
                     const targetPriceInp = await waitForElement("#target-price-inp", 3000);
                     if (targetPriceInp) {
                         setReactInputValue(targetPriceInp, stopOrderValue);
-                        add_logs(`Điền giá đặt: ${stopOrderValue}`);
                     }
 
                     const targetQtyInp = await waitForElement("#target-quantity-inp", 3000);
                     if (targetQtyInp) {
                         setReactInputValue(targetQtyInp, hopdong);
-                        add_logs(`Điền khối lượng: ${hopdong}`);
                     }
 
                     await new Promise(r => setTimeout(r, 500));
@@ -957,11 +935,9 @@ window.addEventListener('load', async () => {
                     const div5 = div4?.querySelectorAll('div')[70];
                     const div6 = div5?.querySelectorAll('div')[0];
 
-                    // 👉 Lay nut dau tien trong div6 va click
                     const btn = div6?.querySelector("button");
                     if (btn) {
                         btn.click();
-                        add_logs("Da click nut dau tien trong div6");
                     } else {
                         add_logs("Khong tim thay nut dau tien trong div6");
                     }
@@ -1360,18 +1336,8 @@ window.addEventListener('load', async () => {
                         let nodeGiaKhop = null;
 
                         try {
-                            // 1️⃣ tìm node cha
-                            const root = document.querySelector(".sc-iSmSVH.fJlkgS");
-                            if (!root) {
-                                console.warn("⚠️ Không tìm thấy .sc-iSmSVH.fJlkgS, thu lai sau 1s...");
-                                setTimeout(funcTheoDoiGiaKhopLenh, 1000);
-                                return;
-                            }
-
-                            // 2️⃣ đi theo cấu trúc div[2] -> div[1]
-                            const div2 = root.children[2];
-                            const div1 = div2?.children[1];
-                            nodeGiaKhop = div1?.querySelector("p.sc-drFUgV.hNoIye");
+                            const main = document.querySelector('main');
+                            const nodeGiaKhop = main.querySelectorAll("p")[2];
 
                             if (!nodeGiaKhop) {
                                 console.warn("⚠️ Không tìm thấy node giá khớp, thu lai sau 1s...");
@@ -1417,12 +1383,19 @@ window.addEventListener('load', async () => {
                                     const shdTP2 = my_hd - parseInt(order50[0]) - parseInt(order25[0]);
 
                                     // --- TP1 ---
+                                    console.log(condition1)
+                                    console.log(dadatTp1)
+                                    console.log(shdTP1)
+
+                                    console.log(condition2)
+                                    console.log(dadatTp2)
+                                    console.log(shdTP2)
+
                                     if (condition1 && !dadatTp1 && shdTP1 > 0) {
                                         console.log("🎯 Kích hoạt TP1");
                                         huyLenhDieuKien();
                                         add_logs("Hủy lệnh sau khi chốt TP1");
 
-                                        add_logs("1444")
                                         const handler = () => runBotStopOrder(tinHieuDao, shdTP1, giamua);
                                         (isEntrade && isDemoMode) ? setTimeout(handler, 1000) : handler();
 
@@ -1434,13 +1407,13 @@ window.addEventListener('load', async () => {
                                         giabandau = tp1;
                                     }
 
+
                                     // --- TP2 ---
                                     else if (condition2 && !dadatTp2 && shdTP2 > 0) {
                                         console.log("🎯 Kích hoạt TP2");
                                         huyLenhDieuKien();
                                         add_logs("Hủy lệnh sau khi chốt TP2");
 
-                                        add_logs("1462")
                                         const handler = () => runBotStopOrder(tinHieuDao, shdTP2, tp1);
                                         (isEntrade && isDemoMode) ? setTimeout(handler, 1000) : handler();
 
@@ -1554,11 +1527,10 @@ window.addEventListener('load', async () => {
                 setTimeout(capNhatDanhSachLenh, 500)
                 setTimeout(funcTheoDoiTrangThaiDat, 2000)
 
+
             } else {
                 console.warn("⚠️ Dieu kien trendType khong phu hop, khong thuc hien dat lenh");
             }
-
-            console.log("-------------------------------------------");
         }
 
 
@@ -1575,7 +1547,6 @@ window.addEventListener('load', async () => {
             showTinHieu(tinhieu);
             if (botAutoOrder.is(":checked") && getIsPaperTrade()) {
                 console.log(`✅ Nhận tín hiệu trên DEMO: ${message}`);
-                add_logs("1598")
                 botAutoClick(tinhieu);
             } else {
                 add_logs("⛔ BỎ QUA TÍN HIỆU: Không phải chế độ DEMO hoặc bot chưa bật!");
@@ -1613,7 +1584,6 @@ window.addEventListener('load', async () => {
                         sohd = botVolumeValue.val();
                     }
                     if (sohd > 0) {
-                        add_logs("1634")
                         runBotStopOrder(tinhieu, sohd, sl);
                     } else {
                         add_logs("Số hợp đồng phải lớn hơn 0");
@@ -1640,7 +1610,6 @@ window.addEventListener('load', async () => {
                         }
 
                     } else {
-                        add_logs("1662")
                         botAutoClick(arr, hopdong, true);
                     }
                 }

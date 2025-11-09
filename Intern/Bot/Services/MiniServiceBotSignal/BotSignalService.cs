@@ -105,7 +105,7 @@ namespace Bot.Services.MiniServiceBotSignal
 
             var message = text.Split('\n');
             var datetime = message[0].Trim();//.Split(" ")[0] + " " + message[0].Trim().Split(" ")[1];
-            var tinhieu = message[1].Trim() == "Tin hieu long: Manh" ? "LONG" : "SHORT";
+            var tinhieu = message[1].Trim().ToUpper() == "TIN HIEU: LONG" ? "LONG" : "SHORT";
             var gia = message[2].Trim().Split(":")[1].Trim();
 
             string inputFormat = "dd/MM/yyyy HH:mm:ss";

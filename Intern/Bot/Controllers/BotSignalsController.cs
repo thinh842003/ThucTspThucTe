@@ -60,7 +60,6 @@ namespace Bot.Controllers
                 // Phân tích tín hiệu từ message
                 var message = request.Text.Split('\n');
                 var signal = message[1].Trim().ToUpper().Contains("LONG") ? "LONG" : "SHORT";
-
                 // ⛔ Kiểm tra tín hiệu trùng
                 if (_lastSignal == signal)
                 {
