@@ -496,18 +496,11 @@ window.addEventListener('load', async () => {
         const extContent = $("#ext-content")
         extContent.children().replaceWith(loggingHtml)
 
-        // const MuiTabs_flexContainer = $("div.MuiTabs-flexContainer")
-        // MuiTabs_flexContainer.append(liPanel)
         const MuiTabs_flexContainer = $("div.MuiTabs-flexContainer");
-        const firstButton = MuiTabs_flexContainer.find("button").first();
-
-        if (firstButton.length) {
-            const buttonClass = firstButton.attr("class"); // lay class cua button[0]
-            $(liPanel).addClass(buttonClass); // them class vao liPanel
-        }
-
-        MuiTabs_flexContainer.append(liPanel);
-
+        const firstBtnClass = MuiTabs_flexContainer.find("button").eq(1).attr("class");
+        const newBtn = $(liPanel);
+        newBtn.addClass(firstBtnClass);
+        MuiTabs_flexContainer.append(newBtn);
 
         const tabExtPanel = $('<div role="tabpanel" id="order-book-tabpanel-2" aria-labelledby="order-book-tab-2" display="display: none" hidden></div>');
 
