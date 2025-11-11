@@ -21,6 +21,7 @@ import ForgotPassword from '../pages/ForgotPassword';
 // Private Pages
 import LogHistory from '../pages/LogHistory';
 import Information from '../pages/Personal_Info';
+import UserBotWebhookManager from '../pages/UserBotWebhookManager';
 
 // Public Routes
 const publicRoutes: RouteType[] = [
@@ -38,6 +39,7 @@ const publicRoutes: RouteType[] = [
 const privateRoutes: RouteType[] = [
   { path: '/information', component: Information },
   { path: '/log-history', component: LogHistory },
+  { path: '/user-bot-webhook', component: UserBotWebhookManager },
 ];
 
 // Navigation Items for Sidebar/Menu

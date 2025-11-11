@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import iconBot from "/src/assets/iconbot.png";
 import { Select, DatePicker, Skeleton, Button, Tooltip } from "antd";
-import { UserOutlined, HomeOutlined, QuestionCircleOutlined, SyncOutlined } from "@ant-design/icons"; // Import các Icon Antd thay thế cho Feather/Lucide
+import { UserOutlined, HomeOutlined, QuestionCircleOutlined, SyncOutlined, SettingOutlined } from "@ant-design/icons"; // Import các Icon Antd thay thế cho Feather/Lucide
+import { Link } from "react-router-dom";
 import { authService } from "../services/authService";
 import { api } from "../services/api";
 import moment from "moment";
@@ -248,17 +249,17 @@ const PersonalInfomation: React.FC = () => {
     if (loading) {
       return (
         <div className="p-6">
-          <Skeleton 
-            active 
-            round 
-            paragraph={{ rows: 6, width: ["60%", "80%", "40%", "70%", "30%", "90%"] }} 
-            className="animate-pulse" 
+          <Skeleton
+            active
+            round
+            paragraph={{ rows: 6, width: ["60%", "80%", "40%", "70%", "30%", "90%"] }}
+            className="animate-pulse"
             // Giữ cho Skeleton có màu nền tương đồng với card
-            style={{ 
-                background: PRIMARY_CARD_BG,
-                '--antd-wave-shadow-color': ACCENT_COLOR, // Thay đổi màu sóng Antd
-                '--antd-skeleton-color': '#374151' // Màu nền các thanh skeleton
-             } as React.CSSProperties}
+            style={{
+              background: PRIMARY_CARD_BG,
+              '--antd-wave-shadow-color': ACCENT_COLOR, // Thay đổi màu sóng Antd
+              '--antd-skeleton-color': '#374151' // Màu nền các thanh skeleton
+            } as React.CSSProperties}
           />
         </div>
       );
@@ -267,8 +268,8 @@ const PersonalInfomation: React.FC = () => {
       return (
         <div className="text-center py-4 text-white">
           <p className="text-red-500 mb-2">{error}</p>
-          <Button onClick={onRetry} 
-            type="primary" 
+          <Button onClick={onRetry}
+            type="primary"
             className="rounded-md border border-transparent py-2 px-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
             style={{ backgroundColor: ACCENT_COLOR, borderColor: ACCENT_COLOR, color: 'white', transition: 'background-color 0.3s' }}
           >
@@ -278,38 +279,38 @@ const PersonalInfomation: React.FC = () => {
       );
     }
     // LOẠI BỎ primaryColor và accentColor ĐỂ KHẮC PHỤC LỖI TYPESCRIPT
-    return <UnifiedTable 
-        type={type} 
-        columns={columns} 
-        data={data} 
-        total={total} 
-        loading={loading} 
-        error={error} 
-        onRetry={onRetry} 
+    return <UnifiedTable
+      type={type}
+      columns={columns}
+      data={data}
+      total={total}
+      loading={loading}
+      error={error}
+      onRetry={onRetry}
     />;
   };
 
   return (
-    <div 
-        className="min-h-screen relative"
-        style={{ backgroundColor: BACKGROUND_COLOR, fontFamily: "'Roboto', sans-serif" }}
+    <div
+      className="min-h-screen relative"
+      style={{ backgroundColor: BACKGROUND_COLOR, fontFamily: "'Roboto', sans-serif" }}
     >
       {/* HIỆU ỨNG BACKGROUND MỜ (tạo cảm giác công nghệ) */}
-      <div 
-        className="absolute top-0 left-0 w-80 h-80 rounded-full opacity-10 blur-3xl" 
+      <div
+        className="absolute top-0 left-0 w-80 h-80 rounded-full opacity-10 blur-3xl"
         style={{ background: '#3b82f6', filter: 'blur(100px)', zIndex: 0 }}
       ></div>
-      
+
       {/* Navigation */}
       <nav className="shadow-lg relative z-10" style={{ backgroundColor: PRIMARY_CARD_BG, borderBottom: `1px solid ${ACCENT_COLOR}30` }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20">
             <div className="flex items-center">
-              <span 
+              <span
                 className="text-2xl font-extrabold uppercase tracking-wider transition-all duration-300"
-                style={{ 
-                  color: 'white', 
-                  fontFamily: 'Saira, sans-serif', 
+                style={{
+                  color: 'white',
+                  fontFamily: 'Saira, sans-serif',
                   // Hiệu ứng phát sáng Neon
                   textShadow: `0 0 3px ${ACCENT_COLOR}AA`
                 }}
@@ -331,14 +332,14 @@ const PersonalInfomation: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="md:col-span-1">
-            <div 
-                className="rounded-xl shadow-2xl overflow-hidden border border-gray-700/50"
-                style={{ backgroundColor: PRIMARY_CARD_BG }}
+            <div
+              className="rounded-xl shadow-2xl overflow-hidden border border-gray-700/50"
+              style={{ backgroundColor: PRIMARY_CARD_BG }}
             >
               <div className="p-6 text-center border-b border-gray-700">
-                <div 
-                    className="mx-auto h-24 w-24 rounded-full overflow-hidden border-4 mb-4 shadow-lg"
-                    style={{ borderColor: ACCENT_COLOR }}
+                <div
+                  className="mx-auto h-24 w-24 rounded-full overflow-hidden border-4 mb-4 shadow-lg"
+                  style={{ borderColor: ACCENT_COLOR }}
                 >
                   <img src={iconBot} alt="Profile" className="h-full w-full object-cover" />
                 </div>
@@ -350,9 +351,9 @@ const PersonalInfomation: React.FC = () => {
               <div className="p-4">
                 <ul className="space-y-2">
                   <li>
-                    <a href="#" 
-                        className="flex items-center px-4 py-3 text-white rounded-xl font-semibold transition-all duration-300"
-                        style={{ backgroundColor: `${ACCENT_COLOR}20`, color: ACCENT_COLOR }}
+                    <a href="#"
+                      className="flex items-center px-4 py-3 text-white rounded-xl font-semibold transition-all duration-300"
+                      style={{ backgroundColor: `${ACCENT_COLOR}20`, color: ACCENT_COLOR }}
                     >
                       <UserOutlined className="mr-3 text-lg" /> Hồ Sơ & Thống Kê
                     </a>
@@ -362,6 +363,11 @@ const PersonalInfomation: React.FC = () => {
                       <QuestionCircleOutlined className="mr-3 text-lg" style={{ color: ACCENT_COLOR }} /> Trợ Giúp
                     </a>
                   </li>
+                  <li>
+                    <Link to="/user-bot-webhook" className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700/50 rounded-xl transition-colors">
+                      <SettingOutlined className="mr-3 text-lg" style={{ color: ACCENT_COLOR }} /> Cài đặt Bot
+                    </Link>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -370,30 +376,30 @@ const PersonalInfomation: React.FC = () => {
           {/* Main Panel */}
           <div className="md:col-span-3 space-y-8">
             {/* User Info */}
-            <div 
-                className="rounded-xl shadow-2xl overflow-hidden border border-gray-700/50"
-                style={{ backgroundColor: PRIMARY_CARD_BG }}
+            <div
+              className="rounded-xl shadow-2xl overflow-hidden border border-gray-700/50"
+              style={{ backgroundColor: PRIMARY_CARD_BG }}
             >
               <div className="p-6 border-b border-gray-700">
                 <h3 className="text-xl font-medium text-white font-montserrat" style={{ color: ACCENT_COLOR }}>
-                    Thông Tin Tài Khoản
+                  Thông Tin Tài Khoản
                 </h3>
                 <p className="mt-1 text-sm text-gray-400">Xem thông tin cơ bản và địa chỉ email của bạn.</p>
               </div>
               <div className="p-6">
                 {loading.user ? (
-                  <Skeleton 
-                    active 
-                    round 
-                    title={false} 
-                    paragraph={{ rows: 3, width: ["60%", "40%", "80%"] }} 
-                    className="animate-pulse" 
-                    style={{ 
-                        background: PRIMARY_CARD_BG,
-                        '--antd-wave-shadow-color': ACCENT_COLOR,
-                        '--antd-skeleton-color': '#374151'
+                  <Skeleton
+                    active
+                    round
+                    title={false}
+                    paragraph={{ rows: 3, width: ["60%", "40%", "80%"] }}
+                    className="animate-pulse"
+                    style={{
+                      background: PRIMARY_CARD_BG,
+                      '--antd-wave-shadow-color': ACCENT_COLOR,
+                      '--antd-skeleton-color': '#374151'
                     } as React.CSSProperties}
-                    />
+                  />
                 ) : error.user ? (
                   <div className="text-center">
                     <p className="text-red-500 text-sm mb-4">{error.user}</p>
@@ -419,7 +425,7 @@ const PersonalInfomation: React.FC = () => {
                         fetchUserInfo();
                       }}
                     >
-                        <SyncOutlined className="mr-1" /> Thử lại
+                      <SyncOutlined className="mr-1" /> Thử lại
                     </Button>
                   </div>
                 ) : userInfo ? (
@@ -471,13 +477,13 @@ const PersonalInfomation: React.FC = () => {
             </div>
 
             {/* Profit Section */}
-            <div 
-                className="rounded-xl shadow-2xl overflow-hidden border border-gray-700/50"
-                style={{ backgroundColor: PRIMARY_CARD_BG }}
+            <div
+              className="rounded-xl shadow-2xl overflow-hidden border border-gray-700/50"
+              style={{ backgroundColor: PRIMARY_CARD_BG }}
             >
               <div className="p-6 border-b border-gray-700">
                 <h3 className="text-xl font-medium text-white font-montserrat" style={{ color: ACCENT_COLOR }}>
-                    Lợi Nhuận
+                  Lợi Nhuận
                 </h3>
                 <p className="mt-1 text-sm text-gray-400">Theo dõi lợi nhuận chi tiết theo thời gian.</p>
               </div>
@@ -511,13 +517,13 @@ const PersonalInfomation: React.FC = () => {
             </div>
 
             {/* Service Section */}
-            <div 
-                className="rounded-xl shadow-2xl overflow-hidden border border-gray-700/50"
-                style={{ backgroundColor: PRIMARY_CARD_BG }}
+            <div
+              className="rounded-xl shadow-2xl overflow-hidden border border-gray-700/50"
+              style={{ backgroundColor: PRIMARY_CARD_BG }}
             >
               <div className="p-6 border-b border-gray-700">
                 <h3 className="text-xl font-medium text-white font-montserrat" style={{ color: ACCENT_COLOR }}>
-                    Gói Dịch Vụ
+                  Gói Dịch Vụ
                 </h3>
                 <p className="mt-1 text-sm text-gray-400">Xem lịch sử thanh toán và trạng thái của các gói dịch vụ bạn đã mua.</p>
               </div>

@@ -167,5 +167,51 @@ namespace Bot.Controllers
             }
 
         }
+
+        [HttpPost("upload-script1")]
+        public async Task<IActionResult> UploadScript1(IFormFile file)
+        {
+            try
+            {
+                if (Path.GetExtension(file.FileName) != ".js")
+                {
+                    throw new Exception("File js only");
+                }
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "script1.js");
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost("upload-ext-entrade")]
+        public async Task<IActionResult> UploadExtEntrade(IFormFile file)
+        {
+            try
+            {
+                if (Path.GetExtension(file.FileName) != ".rar")
+                {
+                    throw new Exception("File rar only");
+                }
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ext_entrade.rar");
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }

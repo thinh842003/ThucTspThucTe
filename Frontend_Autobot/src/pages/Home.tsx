@@ -267,7 +267,6 @@ const HomePage: React.FC = () => {
                                 <div className="flex justify-center lg:justify-start gap-4">
                                     <Link to="/register">
                                         <Button
-                                            type="primary"
                                             size="large"
                                             className="bg-pink-600 border-pink-600 hover:bg-pink-700 hover:border-pink-700 text-white font-extrabold py-3 px-8 rounded-full text-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-xl shadow-pink-500/50"
                                         >

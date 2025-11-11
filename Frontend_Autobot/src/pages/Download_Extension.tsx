@@ -210,14 +210,23 @@ function ExtensionPage() {
             Giao dịch chứng khoán cùng <span className="text-cyan-400 border-b-4 border-blue-600 pb-1">Autobot</span>
           </h1>
           <p className="text-gray-200 text-lg max-w-2xl mx-auto leading-relaxed">
-            Extension Chrome hỗ trợ giao dịch tự động trên nền tảng VPS và các công ty chứng khoán. Tự động đặt lệnh, chốt lời, cắt lỗ theo tín hiệu từ hệ thống. Tích hợp trực tiếp vào giao diện giao dịch, giúp nhà đầu tư **tiết kiệm thời gian** và **tối ưu hóa chiến lược** giao dịch.
+            Extension Chrome hỗ trợ giao dịch tự động trên nền tảng VPS và các công ty chứng khoán. Tự động đặt lệnh, chốt lời, cắt lỗ theo tín hiệu từ hệ thống. Hiện tại, chúng tôi cung cấp phiên bản cho **Smart Pro/Smart Easy (VPS)** và **Entrade X**. Tích hợp trực tiếp vào giao diện giao dịch, giúp nhà đầu tư **tiết kiệm thời gian** và **tối ưu hóa chiến lược** giao dịch.
           </p>
-          <a href={`${API_URL}/ext.rar`} download="Autobot_Extension.rar">
-            <button className="mt-8 px-10 py-3 text-xl bg-cyan-600 hover:bg-cyan-700 transition duration-300 rounded-full text-white font-bold shadow-xl transform hover:scale-105" >
-              <FontAwesomeIcon icon={faDownload} className="mr-3" />
-              Tải về Extension
-            </button>
-          </a>
+          {/* KHỐI DOWNLOAD MỚI */}
+          <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6 mt-8">
+            <a href={`${API_URL}/ext.rar`} download="Autobot_Extension_VPS.rar">
+              <button className="px-8 py-3 text-lg bg-cyan-600 hover:bg-cyan-700 transition duration-300 rounded-full text-white font-bold shadow-xl transform hover:scale-105 w-full" >
+                <FontAwesomeIcon icon={faDownload} className="mr-3" />
+                Tải Ext (VPS/Smart Pro)
+              </button>
+            </a>
+            <a href={`${API_URL}/ext_entrade.rar`} download="Entrade_Extension.rar">
+              <button className="px-8 py-3 text-lg bg-blue-600 hover:bg-blue-700 transition duration-300 rounded-full text-white font-bold shadow-xl transform hover:scale-105 w-full" >
+                <FontAwesomeIcon icon={faDownload} className="mr-3" />
+                Tải Ext (Entrade X)
+              </button>
+            </a>
+          </div>
         </div>
 
         {/* Grid Tính năng & Hướng dẫn */}
@@ -260,12 +269,12 @@ function ExtensionPage() {
               Hướng dẫn cài đặt
             </h2>
             <ol className="list-decimal list-inside space-y-4 text-gray-200 text-lg pl-5">
-              <li>Tải file nén **Autobot_Extension.rar** về máy.</li>
+              <li>Tải file nén extension về máy (chọn phiên bản phù hợp).</li>
               <li>Giải nén file, bạn sẽ nhận được một thư mục **ext**.</li>
               <li>Mở trình duyệt Chrome, truy cập: <code className="bg-gray-700 p-1 rounded">chrome://extensions/</code></li>
               <li>Bật **"Chế độ nhà phát triển"** (Developer Mode) ở góc trên bên phải.</li>
               <li>Bấm **"Tải tiện ích đã giải nén"** (Load unpacked) và chọn thư mục **ext** vừa giải nén.</li>
-              <li>Đăng nhập vào Smart Pro hoặc Smart Easy để kích hoạt extension hoạt động.</li>
+              <li>Đăng nhập vào nền tảng giao dịch tương ứng để kích hoạt extension hoạt động.</li>
             </ol>
           </div>
         </div>
